@@ -1,5 +1,12 @@
 (ns sine.core
-  (:require [api :refer [o subscribe]]
+  (:require [observable :refer [observable
+                                o
+                                subscribe
+                                computed
+                                sample
+                                on
+                                root
+                                transaction]]
             [sine.h :refer [h hs]]))
 
 (defn normalize-arguments [node node-builder]
@@ -36,8 +43,6 @@
 (def html (create-node-builder h))
 (def svg (create-node-builder hs))
 
-;; (.log js/console (first #js [1 2 3]))
-;; 
 (defn log [& args]
   (apply (.-log js/console) args))
 (defn ? [x]
@@ -58,7 +63,8 @@
       [:input {:placeholder placeholder
                :type "text"
                :value x
-               :oninput #(x (.. % -target -value))}]])))
+               :oninput #(x (.. % -target -value))}]
+      ["p" x]])))
 
 (defn app []
   (? (html

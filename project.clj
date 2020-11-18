@@ -17,14 +17,8 @@
                 :compiler     {:output-to "resources/public/js/compiled/lib.js"
                                :language-in :ecmascript6
                                :language-out :ecmascript5
-                               :foreign-libs [{:file "src/sine/hyper.js"
-                                               :provides ["hyper"]
-                                               :module-type :es6}
-                                              {:file "src/sine/observable.js"
+                               :foreign-libs [{:file "src/sine/observable.js"
                                                :provides ["observable"]
-                                               :module-type :es6}
-                                              {:file "src/sine/api.js"
-                                               :provides ["api"]
                                                :module-type :es6}
                                               {:file "src/sine/utils.js"
                                                :provides ["utils"]

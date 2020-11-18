@@ -1,13 +1,8 @@
+/* https://github.com/luwes/sinuous/blob/master/packages/sinuous/observable/src/observable.js */
+
 const EMPTY_ARR = [];
 let tracking;
 let queue;
-
-function getChildrenDeep(children) {
-  return children.reduce(
-    (res, curr) => res.concat(curr, getChildrenDeep(curr._children)),
-    []
-  );
-}
 
 /**
  * Returns true if there is an active observer.
@@ -122,7 +117,8 @@ function observable(value) {
   }
 
   // Tiny indicator that this is an observable function.
-  data.$o = true;
+  // Used in sinuous/h/src/property.js
+  data.$o = 1;
   data._observers = new Set();
   // The 'not set' value must be unique, so `nullish` can be set in a transaction.
   data._pending = EMPTY_ARR;
@@ -160,35 +156,25 @@ function computed(observer, value) {
       tracking._children.push(update);
     }
 
-    const prevChildren = update._children;
-
     _unsubscribe(update);
     update._fresh = true;
     tracking = update;
     value = observer(value);
-
-    // If any children computations were removed mark them as fresh.
-    // Check the diff of the children list between pre and post update.
-    prevChildren.forEach((u) => {
-      if (update._children.indexOf(u) === -1) {
-        u._fresh = true;
-      }
-    });
-
-    // If any children were marked as fresh remove them from the run lists.
-    const allChildren = getChildrenDeep(update._children);
-    allChildren.forEach(removeFreshChildren);
 
     tracking = prevTracking;
     return value;
   }
 
   // Tiny indicator that this is an observable function.
-  data.$o = true;
+  // Used in sinuous/h/src/property.js
+  data.$o = 1;
 
   function data() {
     if (update._fresh) {
-      update._observables.forEach((o) => o());
+      if (tracking) {
+        // If being read from inside another computed, pass observables to it
+        update._observables.forEach((o) => o());
+      }
     } else {
       value = update();
     }
@@ -196,16 +182,6 @@ function computed(observer, value) {
   }
 
   return data;
-}
-
-function removeFreshChildren(u) {
-  if (u._fresh) {
-    u._observables.forEach((o) => {
-      if (o._runObservers) {
-        o._runObservers.delete(u);
-      }
-    });
-  }
 }
 
 /**
