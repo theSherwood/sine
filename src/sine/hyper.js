@@ -111,8 +111,11 @@ const frag = (value) => {
  * @type {hAdd}
  */
 const add = (parent, value, endMark) => {
+  console.log("js", "parent", parent, "value", value, "endMark", endMark)
   value = castNode(value);
+  // console.log(value);
   const fragOrNode = frag(value) || value;
+  // console.log(fragOrNode);
 
   // If endMark is `null`, value will be added to the end of the list.
   parent.insertBefore(value, endMark && endMark.parentNode && endMark);
@@ -126,6 +129,7 @@ const add = (parent, value, endMark) => {
  * @type {hInsert}
  */
 const insert = (el, value, endMark, current, startNode) => {
+  console.log("js current?", current);
   // This is needed if the el is a DocumentFragment initially.
   el = (endMark && endMark.parentNode) || el;
 
@@ -141,9 +145,19 @@ const insert = (el, value, endMark, current, startNode) => {
     // eslint-disable-next-line no-implicit-coercion
     (typeof value === "string" || (typeof value === "number" && (value += "")))
   ) {
+    console.log(
+      "js",
+      "if",
+      current == null || !el.firstChild,
+      "current",
+      current,
+      "firstChild",
+      el.firstChild
+    );
     // Block optimized for string insertion.
     // eslint-disable-next-line eqeqeq
     if (current == null || !el.firstChild) {
+      // console.log(endMark, value, el);
       if (endMark) {
         api.add(el, value, endMark);
       } else {
@@ -160,6 +174,7 @@ const insert = (el, value, endMark, current, startNode) => {
     current = value;
   } else if (typeof value === "function") {
     api.subscribe(() => {
+      console.log("js current", current);
       current = api.insert(
         el,
         value.call({ el, endMark }),

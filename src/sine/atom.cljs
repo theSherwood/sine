@@ -120,36 +120,36 @@
 ;   }
 ; }
 
-; (defn observable [value]
-;   (letfn [(data [next-value]
-;             (if (zero? (count (js/arguments)))
-;               (do (if (and tracking (not (contains? (.-observers data) tracking)))
-;                     (do (conj (.-observers data) tracking)
-;                         (.push (.-observables tracking) data))
-;                     ())
-;                   value)
-;               ((if queue
-;                  (do (if (= (.-pending data) empty-array)
-;                        (.push queue data)
-;                        ())
-;                      (set! (.-pending data) next-value)
-;                      next-value)
-;                  (do (set! value next-value)
-;                      (let [cleared-update tracking]
-;                        (set! tracking)
-;                        (set! (.-run-observers data) #{(.-observers data)})
-;                        (dotimes [n (count (.-run-observers data))]
-;                          (let [observer (nth (.-run-observers data) n)]
-;                            (set! (.-fresh observer) true)))
-;                        (dotimes [n (count (.-run-observers data))]
-;                          (let [observer (nth (.-run-observers data) n)]
-;                            (if (not (.-fresh observer)) (observer) ())))
-;                        (set! tracking cleared-update)
-;                        value))))))]
-;     (set! (.-$o data) true)
-;     (set! (.-observers data) #{})
-;     (set! (.-pending data) empty-array)
-;     data))
+;; (defn observable [value]
+;;   (letfn [(data [next-value]
+;;             (if (zero? (count (js/arguments)))
+;;               (do (if (and tracking (not (contains? (.-observers data) tracking)))
+;;                     (do (conj (.-observers data) tracking)
+;;                         (.push (.-observables tracking) data))
+;;                     ())
+;;                   value)
+;;               ((if queue
+;;                  (do (if (= (.-pending data) empty-array)
+;;                        (.push queue data)
+;;                        ())
+;;                      (set! (.-pending data) next-value)
+;;                      next-value)
+;;                  (do (set! value next-value)
+;;                      (let [cleared-update tracking]
+;;                        (set! tracking)
+;;                        (set! (.-run-observers data) #{(.-observers data)})
+;;                        (dotimes [n (count (.-run-observers data))]
+;;                          (let [observer (nth (.-run-observers data) n)]
+;;                            (set! (.-fresh observer) true)))
+;;                        (dotimes [n (count (.-run-observers data))]
+;;                          (let [observer (nth (.-run-observers data) n)]
+;;                            (if (not (.-fresh observer)) (observer) ())))
+;;                        (set! tracking cleared-update)
+;;                        value))))))]
+;;     (set! (.-$o data) true)
+;;     (set! (.-observers data) #{})
+;;     (set! (.-pending data) empty-array)
+;;     data))
 
 ; function observable(value) {
 ;   function data(nextValue) {

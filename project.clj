@@ -25,6 +25,9 @@
                                                :module-type :es6}
                                               {:file "src/sine/api.js"
                                                :provides ["api"]
+                                               :module-type :es6}
+                                              {:file "src/sine/utils.js"
+                                               :provides ["utils"]
                                                :module-type :es6}]
                                :optimizations :simple
                                :pretty-print true}}]})
