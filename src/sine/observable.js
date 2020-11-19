@@ -186,9 +186,9 @@ function computed(observer, value) {
 
 /**
  * @namespace
- * @borrows computed as S
+ * @borrows computed as c
  */
-export { computed, computed as S };
+export { computed, computed as c };
 
 /**
  * Run the given function just before the enclosing computation updates
@@ -208,34 +208,16 @@ export function cleanup(fn) {
  * @param  {Function} observer
  * @return {Function}
  */
-export function subscribe(observer) {
+function subscribe(observer) {
   computed(observer);
   return () => _unsubscribe(observer._update);
 }
 
 /**
- * Statically declare a computation's dependencies.
- *
- * @param  {Function|Array}   obs
- * @param  {Function} fn - Callback function.
- * @param  {*} [seed] - Seed value.
- * @param  {boolean} [onchanges] - If true the initial run is skipped.
- * @return {Function} Computation which can be used in other computations.
+ * @namespace
+ * @borrows subscribe as c
  */
-export function on(obs, fn, seed, onchanges) {
-  obs = [].concat(obs);
-  return computed((value) => {
-    obs.forEach((o) => o());
-
-    let result = value;
-    if (!onchanges) {
-      result = sample(() => fn(value));
-    }
-
-    onchanges = false;
-    return result;
-  }, seed);
-}
+export { subscribe, subscribe as s };
 
 /**
  * Unsubscribe from an observer.

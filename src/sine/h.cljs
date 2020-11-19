@@ -1,14 +1,15 @@
 (ns sine.h
   (:require [utils :refer [assign access]]
-            [observable :refer [subscribe o]]
-            [clojure.string :refer [lower-case]]))
+            [observable :refer [subscribe]]
+            [clojure.string :refer [lower-case]]
+            [sine.atom :refer [SAtom]]))
 
 ;; A port of https://github.com/luwes/sinuous/tree/master/packages/sinuous/h
 
 (def listeners #js {})
 
 (defn event-proxy [e]
-  ((access listeners (.-type e)) e))
+  ((access e "target" "_listeners" (.-type e)) e))
 
 (defn handle-event [el name x]
   (let [name (lower-case (subs name 2))]
@@ -16,7 +17,7 @@
       (.addEventListener el name event-proxy)
       (.removeEventListener el name event-proxy))
     
-    (assign x listeners name)
+    (assign x el "_listeners" name)
   ))
 
 (def h)
@@ -59,7 +60,7 @@
                    (map? arg)
                    (property (.-el data) arg nil svg nil)
 
-                   (fn? arg)
+                   (or (fn? arg) (instance? SAtom arg))
                    (if (.-el data)
                      (insert (.-el data) arg (add (.-el data) "" nil) nil nil)
                      (set! (.-el data) (apply arg (let [args-vec (vec (.-args data))]
@@ -111,7 +112,7 @@
             (set! (.. el -firstChild -data) (str x))))
         (str x))
 
-      (fn? x)
+      (or (fn? x) (instance? SAtom x))
       (let [box #js {:val current}]
         (subscribe
          #(set! (.-val box)
@@ -147,7 +148,7 @@
     (and (= (first name*) "o") (= (second name*) "n") (not (.-$o x)))
     (handle-event el name* x)
 
-    (fn? x)
+    (or (fn? x) (instance? SAtom x))
     (subscribe #(property el (.call x #js {:el el :name name*}) name* is-attr is-css))
 
     is-css

@@ -7,7 +7,8 @@
                                 on
                                 root
                                 transaction]]
-            [sine.h :refer [h hs]]))
+            [sine.h :refer [h hs]]
+            [sine.atom :as s]))
 
 (defn normalize-arguments [node node-builder]
   (let [n-1 (second node)
@@ -24,12 +25,12 @@
              (let [fragment (js/DocumentFragment.)]
                (.append fragment (build-nodes node))
                (dotimes [n (count args)]
-                 (.append fragment (build-nodes (nth args n)))))
+                 (.append fragment (build-nodes (nth args n))))
+               fragment)
              
              (vector? node)
              (let [n-0 (first node)]
-               (if
-                (or (fn? n-0) (keyword? n-0) (string? n-0))
+               (if (or (fn? n-0) (keyword? n-0) (string? n-0))
                  (let [[props children] (normalize-arguments node build-nodes)]
                    (apply h (into [(if (fn? n-0) n-0 (name n-0)) props] children)))
                  (apply h (map build-nodes node))))
@@ -67,14 +68,25 @@
       ["p" x]])))
 
 (defn app []
-  (? (html
-      [[:div
-        [:h1 "Welcome to the app!"]
-        [counter {:initial 3}]]
-       [input {:initial "fing" :placeholder "wut"}]])))
+  (html
+   [:div
+    [:h1 "Welcome to the app!"]
+    [counter {:initial 3}]]
+   [input {:initial "fing" :placeholder "wut"}]))
 
-(log "what?" (app))
 (render "#app" (app))
+
+(defn counter-2 []
+  (let [a (s/atom 300)
+        c (s/computed- #(+ @a 100))]
+    (html [:div "Count: " a " "
+            [:button {:onclick #(a (inc @a))} "Inc"]
+            [:button {:onclick #(swap! a dec)} "Dec"]
+            [:button {:onclick #(reset! a (c))} "computed"]]
+           [:div "Computed: " c ])))
+
+(render "#app" (counter-2))
+
 
 
 ;; (defn app []

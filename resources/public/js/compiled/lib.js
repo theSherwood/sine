@@ -21738,20 +21738,6 @@ function subscribe$$module$src$sine$observable(a) {
     return _unsubscribe$$module$src$sine$observable(a._update);
   };
 }
-function on$$module$src$sine$observable(a, b, c, d) {
-  a = [].concat(a);
-  return computed$$module$src$sine$observable(function(c) {
-    a.forEach(function(a) {
-      return a();
-    });
-    var e = c;
-    d || (e = sample$$module$src$sine$observable(function() {
-      return b(c);
-    }));
-    d = !1;
-    return e;
-  }, c);
-}
 function unsubscribe$$module$src$sine$observable(a) {
   _unsubscribe$$module$src$sine$observable(a._update);
 }
@@ -21778,11 +21764,149 @@ module$src$sine$observable.transaction = transaction$$module$src$sine$observable
 module$src$sine$observable.observable = observable$$module$src$sine$observable;
 module$src$sine$observable.o = observable$$module$src$sine$observable;
 module$src$sine$observable.computed = computed$$module$src$sine$observable;
-module$src$sine$observable.S = computed$$module$src$sine$observable;
+module$src$sine$observable.c = computed$$module$src$sine$observable;
 module$src$sine$observable.cleanup = cleanup$$module$src$sine$observable;
 module$src$sine$observable.subscribe = subscribe$$module$src$sine$observable;
-module$src$sine$observable.on = on$$module$src$sine$observable;
+module$src$sine$observable.s = subscribe$$module$src$sine$observable;
 module$src$sine$observable.unsubscribe = unsubscribe$$module$src$sine$observable;
+var sine = {atom:{}};
+sine.atom.SAtom = function(a, b, c, d) {
+  this.observable = a;
+  this.meta = b;
+  this.validator = c;
+  this.watches = d;
+  this.cljs$lang$protocol_mask$partition0$ = 2129921;
+  this.cljs$lang$protocol_mask$partition1$ = 98306;
+};
+sine.atom.SAtom.prototype.cljs$core$IEquiv$_equiv$arity$2 = function(a, b) {
+  return this === b;
+};
+sine.atom.SAtom.prototype.cljs$core$IDeref$_deref$arity$1 = function(a) {
+  return this.observable.call(null);
+};
+sine.atom.SAtom.prototype.cljs$core$IReset$_reset_BANG_$arity$2 = function(a, b) {
+  this.observable.call(null, b);
+  if (null != this.validator && !cljs.core.truth_(this.validator.call(null, b))) {
+    throw Error([cljs.core.str.cljs$core$IFn$_invoke$arity$1("Assert failed: "), cljs.core.str.cljs$core$IFn$_invoke$arity$1("Validator rejected reference state"), cljs.core.str.cljs$core$IFn$_invoke$arity$1("\n"), cljs.core.str.cljs$core$IFn$_invoke$arity$1("(validator new-value)")].join(""));
+  }
+  a = module$src$sine$observable.sample.call(null, this.observable);
+  cljs.core._EQ_.call(null, a, b) || (this.observable.call(null, b), null != this.watches && cljs.core._notify_watches.call(null, this, a, b));
+  return b;
+};
+sine.atom.SAtom.prototype.call = function() {
+  var a = null, b = function(a, b) {
+    return cljs.core.reset_BANG_.call(null, this, b);
+  }, a = function(a, d) {
+    switch(arguments.length) {
+      case 1:
+        return this.observable.call(null);
+      case 2:
+        return b.call(this, a, d);
+    }
+    throw Error("Invalid arity: " + (arguments.length - 1));
+  };
+  a.cljs$core$IFn$_invoke$arity$1 = function(a) {
+    return this.observable.call(null);
+  };
+  a.cljs$core$IFn$_invoke$arity$2 = b;
+  return a;
+}();
+sine.atom.SAtom.prototype.apply = function(a, b) {
+  return this.call.apply(this, [this].concat(cljs.core.aclone.call(null, b)));
+};
+sine.atom.SAtom.prototype.cljs$core$IFn$_invoke$arity$0 = function() {
+  return this.observable.call(null);
+};
+sine.atom.SAtom.prototype.cljs$core$IFn$_invoke$arity$1 = function(a) {
+  return cljs.core.reset_BANG_.call(null, this, a);
+};
+sine.atom.SAtom.prototype.cljs$core$ISwap$_swap_BANG_$arity$2 = function(a, b) {
+  return cljs.core.reset_BANG_.call(null, this, b.call(null, module$src$sine$observable.sample.call(null, this.observable)));
+};
+sine.atom.SAtom.prototype.cljs$core$ISwap$_swap_BANG_$arity$3 = function(a, b, c) {
+  return cljs.core.reset_BANG_.call(null, this, b.call(null, module$src$sine$observable.sample.call(null, this.observable), c));
+};
+sine.atom.SAtom.prototype.cljs$core$ISwap$_swap_BANG_$arity$4 = function(a, b, c, d) {
+  return cljs.core.reset_BANG_.call(null, this, b.call(null, module$src$sine$observable.sample.call(null, this.observable), c, d));
+};
+sine.atom.SAtom.prototype.cljs$core$ISwap$_swap_BANG_$arity$5 = function(a, b, c, d, e) {
+  return cljs.core.reset_BANG_.call(null, this, cljs.core.apply.call(null, b, module$src$sine$observable.sample.call(null, this.observable), c, d, e));
+};
+sine.atom.SAtom.prototype.cljs$core$IWatchable$_notify_watches$arity$3 = function(a, b, c) {
+  return cljs.core.reduce_kv.call(null, function(a) {
+    return function(d, f, g) {
+      g.call(null, f, a, b, c);
+      return null;
+    };
+  }(this), null, this.watches);
+};
+sine.atom.SAtom.prototype.cljs$core$IWatchable$_add_watch$arity$3 = function(a, b, c) {
+  return this.watches = cljs.core.assoc.call(null, this.watches, b, c);
+};
+sine.atom.SAtom.prototype.cljs$core$IWatchable$_remove_watch$arity$2 = function(a, b) {
+  return this.watches = cljs.core.dissoc.call(null, this.watches, b);
+};
+sine.atom.SAtom.getBasis = function() {
+  return new cljs.core.PersistentVector(null, 4, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Symbol(null, "observable", "observable", 101672913, null), new cljs.core.Symbol(null, "meta", "meta", -1154898805, null), new cljs.core.Symbol(null, "validator", "validator", -325659154, null), cljs.core.with_meta(new cljs.core.Symbol(null, "watches", "watches", 1367433992, null), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "mutable", "mutable", 875778266), !0], null))], 
+  null);
+};
+sine.atom.SAtom.cljs$lang$type = !0;
+sine.atom.SAtom.cljs$lang$ctorStr = "sine.atom/SAtom";
+sine.atom.SAtom.cljs$lang$ctorPrWriter = function(a, b, c) {
+  return cljs.core._write.call(null, b, "sine.atom/SAtom");
+};
+sine.atom.__GT_SAtom = function(a, b, c, d) {
+  return new sine.atom.SAtom(a, b, c, d);
+};
+sine.atom.atom = function(a, b, c, d) {
+  a = module$src$sine$observable.o.call(null, a);
+  return new sine.atom.SAtom(a, b, c, d);
+};
+sine.atom.computed_ = function(a, b, c, d, e) {
+  b = sine.atom.atom.call(null, e, b, c, d);
+  module$src$sine$observable.subscribe.call(null, function(b) {
+    return function() {
+      return cljs.core.reset_BANG_.call(null, b, a.call(null));
+    };
+  }(b));
+  return b;
+};
+sine.atom.on_ = function(a, b, c, d, e, f) {
+  c = sine.atom.atom.call(null, f, c, d, e);
+  module$src$sine$observable.subscribe.call(null, function(c) {
+    return function() {
+      for (var d = cljs.core.seq.call(null, a), e = null, f = 0, g = 0;;) {
+        if (g < f) {
+          cljs.core._nth.call(null, e, g).call(null), g += 1;
+        } else {
+          if (d = cljs.core.seq.call(null, d)) {
+            e = d, cljs.core.chunked_seq_QMARK_.call(null, e) ? (d = cljs.core.chunk_first.call(null, e), g = cljs.core.chunk_rest.call(null, e), e = d, f = cljs.core.count.call(null, d), d = g) : (cljs.core.first.call(null, e).call(null), d = cljs.core.next.call(null, e), e = null, f = 0), g = 0;
+          } else {
+            break;
+          }
+        }
+      }
+      return cljs.core.reset_BANG_.call(null, c, module$src$sine$observable.sample.call(null, b));
+    };
+  }(c));
+  return c;
+};
+sine.atom.watch_ = function(a, b, c, d, e) {
+  return module$src$sine$observable.subscribe.call(null, function() {
+    for (var c = cljs.core.seq.call(null, a), d = null, e = 0, k = 0;;) {
+      if (k < e) {
+        cljs.core._nth.call(null, d, k).call(null), k += 1;
+      } else {
+        if (c = cljs.core.seq.call(null, c)) {
+          d = c, cljs.core.chunked_seq_QMARK_.call(null, d) ? (c = cljs.core.chunk_first.call(null, d), k = cljs.core.chunk_rest.call(null, d), d = c, e = cljs.core.count.call(null, c), c = k) : (cljs.core.first.call(null, d).call(null), c = cljs.core.next.call(null, d), d = null, e = 0), k = 0;
+        } else {
+          break;
+        }
+      }
+    }
+    return module$src$sine$observable.sample.call(null, b);
+  });
+};
 var clojure = {string:{}};
 clojure.string.seq_reverse = function(a) {
   return cljs.core.reduce.call(null, cljs.core.conj, cljs.core.List.EMPTY, a);
@@ -22043,7 +22167,7 @@ var module$src$sine$utils = {}, assign$$module$src$sine$utils = function(a, b, c
     d[e - 2] = arguments[e];
   }
   for (var e = b, f = d.length - 1, g = $jscomp.makeIterator(d.slice(0, f)), h = g.next();!h.done;h = g.next()) {
-    e = e[h.value];
+    h = h.value, e[h] || (e[h] = {}), e = e[h];
   }
   return e[d[f]] = a;
 }, access$$module$src$sine$utils = function(a, b) {
@@ -22057,15 +22181,15 @@ var module$src$sine$utils = {}, assign$$module$src$sine$utils = function(a, b, c
 };
 module$src$sine$utils.assign = assign$$module$src$sine$utils;
 module$src$sine$utils.access = access$$module$src$sine$utils;
-var sine = {h:{}};
+sine.h = {};
 sine.h.listeners = {};
 sine.h.event_proxy = function(a) {
-  return module$src$sine$utils.access.call(null, sine.h.listeners, a.type).call(null, a);
+  return module$src$sine$utils.access.call(null, a, "target", "_listeners", a.type).call(null, a);
 };
 sine.h.handle_event = function(a, b, c) {
   b = clojure.string.lower_case.call(null, cljs.core.subs.call(null, b, 2));
   cljs.core.truth_(c) ? a.addEventListener(b, sine.h.event_proxy) : a.removeEventListener(b, sine.h.event_proxy);
-  return module$src$sine$utils.assign.call(null, c, sine.h.listeners, b);
+  return module$src$sine$utils.assign.call(null, c, a, "_listeners", b);
 };
 sine.h.h_builder = function(a) {
   return function() {
@@ -22096,7 +22220,7 @@ sine.h.h_builder = function(a) {
               }
             }
           } else {
-            return c instanceof Node ? cljs.core.truth_(b.el) ? sine.h.add.call(null, b.el, c, null) : b.el = c : cljs.core.map_QMARK_.call(null, c) ? sine.h.property.call(null, b.el, c, null, a, null) : cljs.core.fn_QMARK_.call(null, c) ? cljs.core.truth_(b.el) ? sine.h.insert.call(null, b.el, c, sine.h.add.call(null, b.el, "", null), null, null) : b.el = cljs.core.apply.call(null, c, function() {
+            return c instanceof Node ? cljs.core.truth_(b.el) ? sine.h.add.call(null, b.el, c, null) : b.el = c : cljs.core.map_QMARK_.call(null, c) ? sine.h.property.call(null, b.el, c, null, a, null) : cljs.core.fn_QMARK_.call(null, c) || c instanceof sine.atom.SAtom ? cljs.core.truth_(b.el) ? sine.h.insert.call(null, b.el, c, sine.h.add.call(null, b.el, "", null), null, null) : b.el = cljs.core.apply.call(null, c, function() {
               var a = cljs.core.vec.call(null, b.args);
               b.args = cljs.core.subvec.call(null, a, 0, 1);
               return cljs.core.subvec.call(null, a, 1);
@@ -22161,7 +22285,7 @@ sine.h.insert = function(a, b, c, d, e) {
     return d;
   }
   if (!cljs.core.not.call(null, d) && "string" !== typeof d || "string" !== typeof b && "number" !== typeof b) {
-    if (cljs.core.fn_QMARK_.call(null, b)) {
+    if (cljs.core.fn_QMARK_.call(null, b) || b instanceof sine.atom.SAtom) {
       return e = {val:d}, module$src$sine$observable.subscribe.call(null, function(a, d, e) {
         return function() {
           return a.val = sine.h.insert.call(null, d, b.call({el:d, "end-mark":c}), c, a.val, e);
@@ -22207,7 +22331,7 @@ sine.h.property = function(a, b, c, d, e) {
       }
     }
   } else {
-    return cljs.core._EQ_.call(null, cljs.core.first.call(null, c), "o") && cljs.core._EQ_.call(null, cljs.core.second.call(null, c), "n") && cljs.core.not.call(null, b.$o) ? sine.h.handle_event.call(null, a, c, b) : cljs.core.fn_QMARK_.call(null, b) ? module$src$sine$observable.subscribe.call(null, function() {
+    return cljs.core._EQ_.call(null, cljs.core.first.call(null, c), "o") && cljs.core._EQ_.call(null, cljs.core.second.call(null, c), "n") && cljs.core.not.call(null, b.$o) ? sine.h.handle_event.call(null, a, c, b) : cljs.core.fn_QMARK_.call(null, b) || b instanceof sine.atom.SAtom ? module$src$sine$observable.subscribe.call(null, function() {
       return sine.h.property.call(null, a, b.call({el:a, name:c}), c, d, e);
     }) : cljs.core.truth_(e) ? a.style.setProperty.call(null, c, b) : cljs.core.truth_(cljs.core.truth_(d) ? d : cljs.core._EQ_.call(null, cljs.core.subs.call(null, c, 0, 5), "data-") || cljs.core._EQ_.call(null, cljs.core.subs.call(null, c, 0, 5), "aria-")) ? a.setAttribute(c, b) : cljs.core._EQ_.call(null, c, "style") ? "string" === typeof b ? a.style.cssText = b : sine.h.property.call(null, a, b, null, d, !0) : cljs.core._EQ_.call(null, c, "class") ? module$src$sine$utils.assign.call(null, b, 
     a, "className") : module$src$sine$utils.assign.call(null, b, a, c);
@@ -22242,13 +22366,13 @@ sine.core.create_node_builder = function(a) {
           if (g < b) {
             d.append(c.call(null, cljs.core.nth.call(null, e, g))), g += 1;
           } else {
-            return null;
+            break;
           }
         }
-      } else {
-        return cljs.core.vector_QMARK_.call(null, b) ? (e = cljs.core.first.call(null, b), cljs.core.fn_QMARK_.call(null, e) || e instanceof cljs.core.Keyword || "string" === typeof e ? (b = sine.core.normalize_arguments.call(null, b, c), d = cljs.core.nth.call(null, b, 0, null), b = cljs.core.nth.call(null, b, 1, null), cljs.core.apply.call(null, a, cljs.core.into.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.fn_QMARK_.call(null, e) ? e : 
-        cljs.core.name.call(null, e), d], null), b))) : cljs.core.apply.call(null, a, cljs.core.map.call(null, c, b))) : b;
+        return d;
       }
+      return cljs.core.vector_QMARK_.call(null, b) ? (e = cljs.core.first.call(null, b), cljs.core.fn_QMARK_.call(null, e) || e instanceof cljs.core.Keyword || "string" === typeof e ? (b = sine.core.normalize_arguments.call(null, b, c), d = cljs.core.nth.call(null, b, 0, null), b = cljs.core.nth.call(null, b, 1, null), cljs.core.apply.call(null, a, cljs.core.into.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [cljs.core.fn_QMARK_.call(null, e) ? e : cljs.core.name.call(null, 
+      e), d], null), b))) : cljs.core.apply.call(null, a, cljs.core.map.call(null, c, b))) : b;
     }, c = function(a, c) {
       var d = null;
       if (1 < arguments.length) {
@@ -22319,8 +22443,28 @@ sine.core.input = function(a) {
   }(e, a, b, c, d)], null)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, ["p", e], null)], null));
 };
 sine.core.app = function() {
-  return sine.core._QMARK_.call(null, sine.core.html.call(null, new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "h1", "h1", -1896887462), "Welcome to the app!"], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, 
-  [sine.core.counter, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "initial", "initial", 1854648214), 3], null)], null)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [sine.core.input, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "initial", "initial", 1854648214), "fing", new cljs.core.Keyword(null, "placeholder", "placeholder", -104873083), "wut"], null)], null)], null)));
+  return sine.core.html.call(null, new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "h1", "h1", -1896887462), "Welcome to the app!"], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [sine.core.counter, new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, 
+  "initial", "initial", 1854648214), 3], null)], null)], null), new cljs.core.PersistentVector(null, 2, 5, cljs.core.PersistentVector.EMPTY_NODE, [sine.core.input, new cljs.core.PersistentArrayMap(null, 2, [new cljs.core.Keyword(null, "initial", "initial", 1854648214), "fing", new cljs.core.Keyword(null, "placeholder", "placeholder", -104873083), "wut"], null)], null));
 };
-sine.core.log.call(null, "what?", sine.core.app.call(null));
 sine.core.render.call(null, "#app", sine.core.app.call(null));
+sine.core.counter_2 = function() {
+  var a = sine.atom.atom.call(null, 300), b = sine.atom.computed_.call(null, function(a) {
+    return function() {
+      return cljs.core.deref.call(null, a) + 100;
+    };
+  }(a));
+  return sine.core.html.call(null, new cljs.core.PersistentVector(null, 7, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), "Count: ", a, " ", new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "onclick", "onclick", 1297553739), function(a, b) {
+    return function() {
+      return a.call(null, cljs.core.deref.call(null, a) + 1);
+    };
+  }(a, b)], null), "Inc"], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "onclick", "onclick", 1297553739), function(a, b) {
+    return function() {
+      return cljs.core.swap_BANG_.call(null, a, cljs.core.dec);
+    };
+  }(a, b)], null), "Dec"], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "button", "button", 1456579943), new cljs.core.PersistentArrayMap(null, 1, [new cljs.core.Keyword(null, "onclick", "onclick", 1297553739), function(a, b) {
+    return function() {
+      return cljs.core.reset_BANG_.call(null, a, b.call(null));
+    };
+  }(a, b)], null), "computed"], null)], null), new cljs.core.PersistentVector(null, 3, 5, cljs.core.PersistentVector.EMPTY_NODE, [new cljs.core.Keyword(null, "div", "div", 1057191632), "Computed: ", b], null));
+};
+sine.core.render.call(null, "#app", sine.core.counter_2.call(null));
