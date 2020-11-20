@@ -2,14 +2,7 @@
   (:require
    [sine.h :refer [h hs]]
    [sine.builder :refer [create-node-builder]]
-   [sine.atom :refer [atom computed on watch]]
-   [observable :refer [o
-                       c
-                       subscribe
-                       unsubscribe
-                       sample
-                       root
-                       transaction]]))
+   [sine.atom :as sa]))
 
 (defn render [selector view]
   (.append (js/document.querySelector selector) view))
@@ -18,14 +11,14 @@
 (def svg (create-node-builder hs))
 
 ;; Define these so they will be accessible from this namespace
-(def atom atom)
-(def computed computed)
-(def on on)
-(def watch watch)
-(def atom- o)
-(def computed- c)
-(def root root)
-(def subscribe subscribe)
-(def unsubscribe unsubscribe)
-(def sample sample)
-(def transaction transaction)
+(def atom sa/atom)
+(def computed sa/computed)
+(def on sa/on)
+(def watch sa/watch)
+(def atom- sa/atom-)
+(def computed- sa/computed-)
+(def root sa/root)
+(def subscribe sa/subscribe)
+(def unsubscribe sa/unsubscribe)
+(def sample sa/sample)
+(def transaction sa/transaction)

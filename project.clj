@@ -1,4 +1,4 @@
-(defproject sine "0.0.2.2-SNAPSHOT"
+(defproject sine "0.0.2.12-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -14,10 +14,10 @@
                 :compiler     {:output-to "resources/public/js/compiled/lib.js"
                                :language-in :ecmascript6
                                :language-out :ecmascript5
-                               :foreign-libs [{:file "src/sine/observable.js"
+                               :foreign-libs [{:file "resources/observable.js"
                                                :provides ["observable"]
                                                :module-type :es6}
-                                              {:file "src/sine/utils.js"
+                                              {:file "resources/utils.js"
                                                :provides ["utils"]
                                                :module-type :es6}]
                                :optimizations :simple

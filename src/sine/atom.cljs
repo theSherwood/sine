@@ -1,11 +1,13 @@
 (ns sine.atom
-  (:require [observable :refer [o
-                                c
-                                root
-                                subscribe
-                                unsubscribe
-                                sample
-                                transaction]]))
+  (:require [observable :as o]))
+
+(def atom- o/o)
+(def computed- o/c)
+(def subscribe o/subscribe)
+(def unsubscribe o/unsubscribe)
+(def sample o/sample)
+(def root o/root)
+(def transaction o/transaction)
 
 (deftype SAtom [observable meta validator ^:mutable watches]
   IEquiv
@@ -52,7 +54,7 @@
     (set! watches (dissoc watches key))))
 
 (defn atom [x meta validator watches]
-  (let [observable (o x)]
+  (let [observable (atom- x)]
     (SAtom. observable meta validator watches)))
 
 (defn computed [f meta validator watches seed]
@@ -60,23 +62,14 @@
     (subscribe #(reset! new-atom (f)))
     new-atom))
 
-(defn on [obs f meta validator watches seed]
+(defn on [observables f meta validator watches seed]
   (let [new-atom (atom seed meta validator watches)]
     (subscribe #(do
-                  (doseq [o obs] (o))
+                  (doseq [obs observables] (obs))
                   (reset! new-atom (sample f))))
     new-atom))
 
-(defn watch [obs f]
+(defn watch [observables f]
   (subscribe #(do
-                (doseq [o obs] (o))
+                (doseq [obs observables] (obs))
                 (sample f))))
-
-;; Define these so they will be accessible from this namespace
-(def atom- o)
-(def computed- c)
-(def root root)
-(def subscribe subscribe)
-(def unsubscribe unsubscribe)
-(def sample sample)
-(def transaction transaction)

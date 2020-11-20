@@ -200,16 +200,10 @@ export function cleanup(fn) {
  * @param  {Function} observer
  * @return {Function}
  */
-function subscribe(observer) {
+export function subscribe(observer) {
   computed(observer);
   return () => _unsubscribe(observer._update);
 }
-
-/**
- * @namespace
- * @borrows subscribe as c
- */
-export { subscribe, subscribe as s };
 
 /**
  * Unsubscribe from an observer.

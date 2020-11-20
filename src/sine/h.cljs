@@ -18,16 +18,15 @@
     (assign x el "_listeners" name)
   ))
 
-(def h)
-(def hs)
-
-(def h-builder)
-(def add)
-(def cast-node)
-(def frag)
-(def property)
-(def insert)
-(def remove-nodes)
+(declare h)
+(declare hs)
+(declare h-builder)
+(declare add)
+(declare cast-node)
+(declare frag)
+(declare property)
+(declare insert)
+(declare remove-nodes)
 
 (defn h-builder [svg]
   (fn h [& args]

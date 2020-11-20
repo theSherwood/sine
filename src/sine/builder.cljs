@@ -1,4 +1,4 @@
-(ns sine.builder )
+(ns sine.builder)
 
 (defn normalize-arguments [node node-builder]
   (let [n-1 (second node)
