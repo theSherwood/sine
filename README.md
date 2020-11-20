@@ -1,22 +1,29 @@
 # sine
 
-A Clojure library designed to ... well, that part is up to you.
+A port of [Sinuous](https://github.com/luwes/sinuous) to [ClojureScript](http://github.com/clojure/clojurescript)
 
-## Usage
+[![Clojars Project](http://clojars.org/sine/latest-version.svg)](http://clojars.org/sine)
 
-FIXME
+*WORK IN PROGRESS*
 
-## License
+## Rational
 
-Copyright © 2020 FIXME
+Rather than wrapping [React](http://facebook.github.io/react/) as [Reagent](https://github.com/reagent-project/reagent) does, sine is a port of a smaller, faster, simpler alternative: [Sinuous](https://github.com/luwes/sinuous).
 
-This program and the accompanying materials are made available under the
-terms of the Eclipse Public License 2.0 which is available at
-http://www.eclipse.org/legal/epl-2.0.
+[Sinuous](https://github.com/luwes/sinuous), and by extension sine, lean far more heavily into the reactive paradigm than [React](http://facebook.github.io/react/). Reactive updates are fine-grained and at the sub-component level.
 
-This Source Code may also be made available under the following Secondary
-Licenses when the conditions for such availability set forth in the Eclipse
-Public License, v. 2.0 are satisfied: GNU General Public License as published by
-the Free Software Foundation, either version 2 of the License, or (at your
-option) any later version, with the GNU Classpath Exception which is available
-at https://www.gnu.org/software/classpath/license.html.
+## Examples
+
+If you have any experience with [Reagent](https://github.com/reagent-project/reagent), most of this should look moderately familiar.
+
+```clj
+(defn counter [{:keys [initial]}]
+  (let [c (s/atom (or initial 0))]
+    (html
+     [:div "Count: " c " "
+      [:button {:onclick #(swap! c inc)} "Inc"]])))
+```
+
+## Acknowledgements
+
+Big shout out to the incomparable [Wesley Luyten](https://github.com/luwes) for [Sinuous](https://github.com/luwes/sinuous), without which, sine would not exist
