@@ -5,14 +5,6 @@ let tracking;
 let queue;
 
 /**
- * Returns true if there is an active observer.
- * @return {boolean}
- */
-export function isListening() {
-  return !!tracking;
-}
-
-/**
  * Creates a root and executes the passed function that can contain computations.
  * The executed function receives an `unsubscribe` argument which can be called to
  * unsubscribe all inner computations.

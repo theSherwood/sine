@@ -6,8 +6,6 @@
 
 ;; A port of https://github.com/luwes/sinuous/tree/master/packages/sinuous/h
 
-(def listeners #js {})
-
 (defn event-proxy [e]
   ((access e "target" "_listeners" (.-type e)) e))
 
@@ -39,7 +37,7 @@
                    (nil? arg) nil
 
                    (string? arg)
-                   (if (not (nil? (.-el data)))
+                   (if-not (nil? (.-el data))
                      (add (.-el data) arg nil)
                      (set! (.-el data)
                            (if svg
@@ -126,7 +124,7 @@
       :else
       (do
         (if end-mark
-          (if current
+          (when current
             (let [start-node (or start-node
                                  (or (and (get current :start-mark nil)
                                           (.-nextSibling (get current :start-mark nil)))
@@ -172,7 +170,7 @@
   (loop [start-node start-node]
     (if-not (= start-node end-mark)
       (let [n (.-nextSibling start-node)]
-        (if (= parent (.-parentNode start-node))
+        (when (= parent (.-parentNode start-node))
           (.removeChild parent start-node))
         (recur n)))))
 

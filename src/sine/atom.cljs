@@ -1,9 +1,10 @@
 (ns sine.atom
   (:require [observable :refer [o
-                                subscribe
-                                computed
-                                sample
+                                c
                                 root
+                                subscribe
+                                unsubscribe
+                                sample
                                 transaction]]))
 
 (deftype SAtom [observable meta validator ^:mutable watches]
@@ -19,15 +20,14 @@
     (when-not (nil? validator)
       (assert (validator new-value) "Validator rejected reference state"))
     (let [old-value (sample observable)]
-      (if-not (= old-value new-value)
-        (do
-          (observable new-value)
-          (when-not (nil? watches)
-            (-notify-watches this old-value new-value))))
+      (when-not (= old-value new-value)
+        (observable new-value)
+        (when-not (nil? watches)
+          (-notify-watches this old-value new-value)))
       new-value))
 
   IFn
-  (-invoke [this] (observable))
+  (-invoke [_] (observable))
   (-invoke [this new-value] (reset! this new-value))
 
   ISwap
@@ -46,31 +46,37 @@
                  (f key this oldval newval)
                  nil)
                nil watches))
-  (-add-watch [this key f]
+  (-add-watch [_ key f]
     (set! watches (assoc watches key f)))
-  (-remove-watch [this key]
+  (-remove-watch [_ key]
     (set! watches (dissoc watches key))))
 
 (defn atom [x meta validator watches]
   (let [observable (o x)]
     (SAtom. observable meta validator watches)))
 
-;; rename
-(defn computed- [f meta validator watches seed]
+(defn computed [f meta validator watches seed]
   (let [new-atom (atom seed meta validator watches)]
     (subscribe #(reset! new-atom (f)))
     new-atom))
 
-;; rename
-(defn on- [obs f meta validator watches seed]
+(defn on [obs f meta validator watches seed]
   (let [new-atom (atom seed meta validator watches)]
     (subscribe #(do
                   (doseq [o obs] (o))
                   (reset! new-atom (sample f))))
     new-atom))
 
-;; rename
-(defn watch- [obs f meta validator watches]
+(defn watch [obs f]
   (subscribe #(do
                 (doseq [o obs] (o))
                 (sample f))))
+
+;; Define these so they will be accessible from this namespace
+(def atom- o)
+(def computed- c)
+(def root root)
+(def subscribe subscribe)
+(def unsubscribe unsubscribe)
+(def sample sample)
+(def transaction transaction)
