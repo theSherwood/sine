@@ -6,7 +6,7 @@ A port of [Sinuous](https://github.com/luwes/sinuous) to [ClojureScript](http://
 
 *WORK IN PROGRESS*
 
-## Rational
+## Rationale
 
 Rather than wrapping [React](http://facebook.github.io/react/) as [Reagent](https://github.com/reagent-project/reagent) does, sine is a port of a smaller, faster, simpler alternative: [Sinuous](https://github.com/luwes/sinuous).
 
