@@ -1,5 +1,7 @@
-(defproject sine "0.0.3"
+(defproject sine "0.0.4"
   :description "A port of Sinuous to ClojureScript"
+  :repositories [["releases" {:url "https://blueant.com/archiva/internal"
+                              :creds :gpg}]]
   :url "https://github.com/theSherwood/sine"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
